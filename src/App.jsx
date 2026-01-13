@@ -744,6 +744,7 @@ export default function App() {
     } else {
       const studio = selectedStudio;
       if (studio) {
+          // ✅ 修正：使用正確的變數語法與標準地圖連結
           const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(studio.address)}`;
           
           // ✨ 新增：如果有備註 (例如: 禁止攜伴)，就把它加進去
@@ -901,7 +902,7 @@ ${itemsText}
   };
 
   const handlePreSubmit = (e) => {
-    e.preventDefault();
+    // 移除 e.preventDefault()，因為這不是 form 的 onSubmit
     if (!validateForm()) return;
     const text = generateOrderText();
     setOrderText(text);
@@ -988,6 +989,7 @@ ${itemsText}
     if (userInfo.studioLocationIndex !== '') {
       const studio = selectedStudio;
       const query = encodeURIComponent(studio.address);
+      // ✅ 修正：使用正確的變數語法與標準地圖連結
       window.open(`https://www.google.com/maps/search/?api=1&query=${query}`, '_blank');
     }
   };
@@ -1364,30 +1366,33 @@ ${itemsText}
                                             <button type="button" onClick={() => handleCopyAccount(false)} className="bg-[#B08D55] text-white p-1 rounded hover:bg-[#8D6B40] transition-colors"><Copy size={12}/></button>
                                         </div>
                                     </div>
-                              {/* === 🔴 修正：改成強制勾選框 === */}
-<div className="mt-4 p-3 bg-rose-50 border border-rose-200 rounded-lg flex items-start cursor-pointer hover:bg-rose-100 transition-colors"
-     onClick={() => setAgreedNoNote(!agreedNoNote)}> {/* 點擊整塊區域都能勾選 */}
-    
-    <input
-        id="check-no-note"
-        type="checkbox"
-        checked={agreedNoNote}
-        onChange={(e) => setAgreedNoNote(e.target.checked)}
-        className="mt-1 mr-3 h-5 w-5 text-rose-600 focus:ring-rose-500 border-gray-300 rounded cursor-pointer"
-        onClick={(e) => e.stopPropagation()} // 防止點擊框框時觸發兩次
-    />
-    
-    <label htmlFor="check-no-note" className="text-sm text-gray-700 cursor-pointer select-none leading-relaxed">
-        <span className="flex items-center gap-1 font-bold text-rose-700 mb-1">
-            <AlertCircle size={16} /> 必讀確認：
-        </span>
-        轉帳時
-        <span className="font-bold text-rose-600 underline decoration-2 underline-offset-2 mx-1">
-            請勿填寫備註
-        </span>
-        ，以免遮擋後五碼導致系統無法對帳。
-    </label>
-</div>
+                                    {/* === 🔴 修正：改成強制勾選框 === */}
+                                    <div className="mt-4 p-3 bg-rose-50 border border-rose-200 rounded-lg flex items-start cursor-pointer hover:bg-rose-100 transition-colors col-span-1 md:col-span-3"
+                                         onClick={() => setAgreedNoNote(!agreedNoNote)}> {/* 點擊整塊區域都能勾選 */}
+                                        
+                                        <input
+                                            id="check-no-note"
+                                            type="checkbox"
+                                            checked={agreedNoNote}
+                                            onChange={(e) => setAgreedNoNote(e.target.checked)}
+                                            className="mt-1 mr-3 h-5 w-5 text-rose-600 focus:ring-rose-500 border-gray-300 rounded cursor-pointer flex-shrink-0"
+                                            onClick={(e) => e.stopPropagation()} // 防止點擊框框時觸發兩次
+                                        />
+                                        
+                                        <label htmlFor="check-no-note" className="text-sm text-gray-700 cursor-pointer select-none leading-relaxed">
+                                            <span className="flex items-center gap-1 font-bold text-rose-700 mb-1">
+                                                <AlertCircle size={16} /> 必讀確認：
+                                            </span>
+                                            轉帳時
+                                            <span className="font-bold text-rose-600 underline decoration-2 underline-offset-2 mx-1">
+                                                請勿填寫備註
+                                            </span>
+                                            ，以免遮擋後五碼導致系統無法對帳。
+                                        </label>
+                                    </div>
+                                </div>
+                        </div>
+
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label className="block text-sm font-bold text-[#4A4238] tracking-wide mb-2">匯款日期 <span className="text-[#C18C5D]">*</span></label>
