@@ -5,7 +5,7 @@ import { Copy, CheckCircle, Heart, Calendar, CreditCard, Info, MapPin, AlertCirc
 
 // --- 全域設定區 ---
 
-// ⚠️ 官方 LINE 連結
+//⚠️ 官方 LINE 連結
 const LINE_LINK = "https://lin.ee/qmFjzVr"; 
 const LINE_ID = "@ybc0766y";
 
@@ -1453,8 +1453,22 @@ ${itemsText}
                 <span className="text-3xl font-serif text-[#4A4238] font-medium">${total.toLocaleString()}</span>
             </div>
             <button 
-                onClick={handlePreSubmit} 
-                disabled={isSubmitting || hasSubmitted|| !agreedNoNote}
+                onClick={() => {
+                    // 👇 1. 先檢查有沒有打勾
+                    if (!agreedNoNote) {
+                        alert("⚠️ 請務必勾選「轉帳時請勿填寫備註」才能送出喔！");
+                        
+                        // 👇 貼心功能：自動幫客人滾動畫面到那個紅色勾選框
+                        const checkbox = document.getElementById('check-no-note');
+                        if (checkbox) checkbox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        
+                        return; // 擋住，不讓它送出
+                    }
+                    // 👇 2. 如果有打勾，才執行原本的送出流程
+                    handlePreSubmit();
+                }} 
+                // 👇 3. 這裡把 !agreedNoNote 拿掉了，按鈕永遠是亮的可按狀態
+                disabled={isSubmitting || hasSubmitted}
                 className="flex-1 bg-[#4A4238] text-white py-4 font-bold uppercase tracking-[0.15em] text-sm hover:bg-[#2C2620] transition-all rounded-md shadow-lg shadow-[#4A4238]/20 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
                 {isSubmitting ? <><Loader2 className="animate-spin" size={18} /> 處理中...</> : hasSubmitted ? <>已送出</> : <>送出訂單</>}
